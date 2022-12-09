@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* @tailwind screens; */
+
+@layer base {
+    .bgLiner {
+        background: linear-gradient(172.7deg,
+        #FFD370 5.12%,
+        #FFD370 53.33%,
+        #FFD370 53.44%,
+        #FFFFFF 53.45%,
+        #FFFFFF 94.32%);
+        background-repeat: no-repeat;
+    };
+    .box_shadow {
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+        border-radius: 10px;
+    };
+}
