@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./dist/output.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- <script src="all.js"></script> -->
+</head>
+
+<body class="bg-primary">
+  <div class="container pt-[17px] flex mt-20 justify-center md:space-x-[80px]">
+    <!-- logo & banner -->
+    <div class="hidden md:block">
+      <header class="flex-col justify-center items-center mt-10">
+        <img class="w-[300px] mb-5 m-auto" src="./src/todoList_image/title.svg" alt="">
+        <img class="max-w-[386px] max-h-[386px]" src="./src/todoList_image/banner.png" alt="">
+      </header>
+    </div>
+    
+
+    <!-- sign in -->
+    <section class="flex-col justify-start mb-4 w-[304px]">
+      <img class="md:hidden w-[300px] mb-5 m-auto" src="./src/todoList_image/title.svg" alt="">
+      <div class="flex justify-center md:!justify-start">
+        <h1 class="text-2xl font-bold mb-6 ">註冊帳號</h1>
+      </div>
+      <ul class="space-y-4 max-w-[304px]">
+        <li>
+          <h4 class="text-[14px] font-bold mb-1">Email</h4>
+          <input type="text" class="sign_email text-4 text-third py-3 pl-4 rounded-[10px] w-full" placeholder="請輸入 Email">
+        </li>
+        <li>
+          <h4 class="text-[14px] font-bold mb-1">您的暱稱</h4>
+          <input type="text" class="sign_nickName text-4 text-third py-3 pl-4 rounded-[10px] w-full" placeholder="請輸入您的暱稱">
+        </li>
+        <li>
+          <h4 class="text-[14px] font-bold mb-1">密碼</h4>
+          <input type="text" class="sign_password text-4 text-third py-3 pl-4 rounded-[10px] w-full" placeholder="請輸入密碼">
+        </li>
+        <li>
+          <h4 class="text-[14px] font-bold mb-1">再次輸入密碼</h4>
+          <input type="text" class="sign_checkPassword text-4 text-third py-3 pl-4 rounded-[10px] w-full" placeholder="請再次輸入密碼">
+        </li>
+      </ul>
+      <div class="flex justify-center mt-6">
+        <input type="button" class="sign_btn w-[160px] h-[47px] font-bold rounded-[10px] text-white bg-secondary" value="註冊帳號">
+      </div>
+      <div class="flex justify-center mt-5">
+        <input type="button" class="login_btn font-bold" value="登入">
+      </div>
+    </section>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="signin_and_login.js"></script>
+</body>
+</html>

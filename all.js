@@ -1,8 +1,5 @@
 let add_text = document.querySelector(".add_text");
 let add_event = document.querySelector(".add_event");
-// let check = document.querySelector(".check");
-// let delete_event = document.querySelector(".delete_event");
-// let delete_all = document.querySelector(".delete_all");
 let js_list = document.querySelector(".js_list");
 let js_total = document.querySelector(".js_total");
 let js_filter = document.querySelector(".js_filter");
@@ -225,3 +222,12 @@ const getTodo = () => {
     console.log(res.data);
   })
 }
+
+// 函式 => axios 推資料
+// const add_todo = () => {
+//   axios.post(`${_url}/todos`,obj,{headers: { 'Authorization': jwt}})
+
+//   .then(res => {
+//     console.log(res.data);
+//   })
+// }
