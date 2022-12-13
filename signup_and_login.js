@@ -7,6 +7,8 @@ let sign_nickName = document.querySelector(".sign_nickName");
 let sign_password = document.querySelector(".sign_password");
 let sign_checkPassword = document.querySelector(".sign_checkPassword");
 let sign_btn = document.querySelector(".sign_btn");
+let login_btn = document.querySelector(".login_btn");
+
 
 // log in
 let logIn_email = document.querySelector(".logIn_email");
@@ -15,6 +17,21 @@ let logIn_btn = document.querySelector(".logIn_btn");
 let signUp_btn = document.querySelector(".signUp_btn");
 let authorization = localStorage.getItem('authorization');
 let nickname = localStorage.getItem('nickname');
+
+let to_signUp = document.querySelector(".to_signUp");
+let to_logIn = document.querySelector(".to_logIn");
+
+// 監聽 => 註冊、登入介面切換
+login_btn.addEventListener("click",function(e){
+  to_signUp.classList.add("hidden");
+  to_logIn.classList.remove("hidden");
+})
+
+// 監聽 => 註冊、登入介面切換
+signUp_btn.addEventListener("click",function(e){
+  to_logIn.classList.add("hidden");
+  to_signUp.classList.remove("hidden");
+})
 
 // 函式 => 檢查 email
 const check_email = (email) =>{
@@ -76,7 +93,7 @@ const init = () =>{
     location.href='index.html';
   }else{return}
 }
-init();
+// init();
 
 // 監聽 => 點擊，登入帳號
 logIn_btn.addEventListener("click",function(e){
@@ -86,9 +103,9 @@ logIn_btn.addEventListener("click",function(e){
   if(check_logIn(logIn_email.value,logIn_password.value)){
     return
   }
-  // else if(){
-  //   alert("此帳號尚未註冊")
-  // }
+  else if(logIn_email.value !== obj.user.email || logIn_password.value !== obj.user.password){
+    alert("此帳號尚未註冊")
+  }
   else{
     log_in(logIn_email.value,logIn_password.value);
     alert("登入成功")
@@ -130,7 +147,7 @@ const log_in = (email, password) => {
 
     localStorage.setItem('authorization', jwt);
     localStorage.setItem('nickname', nickname);
-    location.href = 'index.html';
+    // location.href = 'index.html';
   })
 }
 
