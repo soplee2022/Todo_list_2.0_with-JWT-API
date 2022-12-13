@@ -22,13 +22,13 @@ let to_signUp = document.querySelector(".to_signUp");
 let to_logIn = document.querySelector(".to_logIn");
 
 // 監聽 => 註冊、登入介面切換
-login_btn.addEventListener("click",function(e){
+login_btn.addEventListener("click",(e) => {
   to_signUp.classList.add("hidden");
   to_logIn.classList.remove("hidden");
 })
 
 // 監聽 => 註冊、登入介面切換
-signUp_btn.addEventListener("click",function(e){
+signUp_btn.addEventListener("click",(e) => {
   to_logIn.classList.add("hidden");
   to_signUp.classList.remove("hidden");
 })
@@ -54,7 +54,7 @@ const recheck_password = (password) =>{
 }
 
 // 監聽 => 點擊，註冊帳號
-sign_btn.addEventListener("click",function(e){
+sign_btn.addEventListener("click",(e) => {
   check_email(sign_email.value);
   check_password(sign_password.value);
 
@@ -96,7 +96,7 @@ const init = () =>{
 // init();
 
 // 監聽 => 點擊，登入帳號
-logIn_btn.addEventListener("click",function(e){
+logIn_btn.addEventListener("click",(e) => {
   obj.user.email = logIn_email.value;
   obj.user.password = logIn_password.value;
 
