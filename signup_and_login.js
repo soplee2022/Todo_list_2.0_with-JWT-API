@@ -69,8 +69,9 @@ sign_btn.addEventListener("click",(e) => {
 // 函式 => axios 註冊
 const _url = "https://todoo.5xcamp.us";
 let jwt = "";
-let data =[];
-const obj = { user: {} };
+let axios_data =[];
+const user_obj = { user: {} };
+let config = {headers: { 'Authorization': authorization}};
 
 const signUp = (email, nickname, password) => {
   axios.post(`${_url}/users`,{
@@ -86,7 +87,6 @@ const signUp = (email, nickname, password) => {
     })
 }
 
-
 // 函式 => 跳轉到 todo list
 const init = () =>{
   if(authorization!==null|| nickname !==null){
@@ -97,28 +97,15 @@ const init = () =>{
 
 // 監聽 => 點擊，登入帳號
 logIn_btn.addEventListener("click",(e) => {
-  obj.user.email = logIn_email.value;
-  obj.user.password = logIn_password.value;
+  user_obj.user.email = logIn_email.value;
+  user_obj.user.password = logIn_password.value;
 
   if(check_logIn(logIn_email.value,logIn_password.value)){
     return
-  }
-  else if(logIn_email.value !== obj.user.email || logIn_password.value !== obj.user.password){
-    alert("此帳號尚未註冊")
-  }
-  else{
+  }else{
     log_in(logIn_email.value,logIn_password.value);
-    alert("登入成功")
   }
 });
-
-// 確認 email 是否已經註冊 -> 比對資料庫
-  // if(logIn_email.value === obj.user.email && logIn_password.value === obj.user.password){
-  //   // log_in(logIn_email.value,logIn_password.value)
-  //   // alert("登入成功")
-  // }else{
-  //   alert("此帳號尚未註冊")
-  // }
 
 // 函式 => 確認登入信箱、密碼
 const check_logIn = (email,password) =>{
@@ -133,7 +120,8 @@ const check_length = (password) =>{
 
 // 函式 => axios 登入
 const log_in = (email, password) => {
-  axios.post(`${_url}/users/sign_in`,
+  axios
+  .post(`${_url}/users/sign_in`,
     {
       "user": {
         email,
@@ -142,32 +130,13 @@ const log_in = (email, password) => {
   })
   .then(res => {
     console.log(res.data);
+
     jwt = res.headers.authorization;
     let nickname = res.data.nickname;
 
     localStorage.setItem('authorization', jwt);
     localStorage.setItem('nickname', nickname);
-    // location.href = 'index.html';
+    alert(res.data.message);
+    location.href = 'index.html';
   })
 }
-
-// 函式 => axios 顯示列表
-const getTodo = () => {
-  axios.get(`${_url}/todos`,{
-    headers: { 
-      'Authorization': jwt,
-    }
-  })
-  .then(res => {
-    console.log(res.data);
-  })
-}
-
-// 函式 => axios 推資料
-// const add_todo = () => {
-//   axios.post(`${_url}/todos`,obj,{headers: { 'Authorization': jwt}})
-
-//   .then(res => {
-//     console.log(res.data);
-//   })
-// }
