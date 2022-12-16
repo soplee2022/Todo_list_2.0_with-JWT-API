@@ -11,66 +11,48 @@ let js_finish = document.querySelector(".js_finish");
 let js_userName = document.querySelector(".js_userName");
 
 let obj = {};
-let data = [];
 // get_axios ();
 
-// 監聽 => 新增待辦事項
-// add_event.addEventListener("click",function(e){
-//     // 排除無效新增
-//     if(add_text.value === ""){
-//       alert("請新增代辦事項");
-//       return
-//     }else{
-//       // 組成 obj -> push data -> 印在網頁上
-//       obj.content = add_text.value;
-//       obj.finish = false;
-//       data.push(obj);
-//       // obj 推上 json API
-//       post_todo(obj);
-//     }
-//     init();
-//   })
-
 // 監聽 => 篩選待辦事項
-// js_filter.addEventListener("click",function(e){
-//   let str_all = "";
-//   data.forEach(function(item){
-//     str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
-//     <input type="checkbox" ${item.finish && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.finish}" id="${item.id}">
-//     <p class="text-sm grow ${ item.finish && 'line-through text-third'}">${item.content}</p>
-//     <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" id="${item.id}">
-//     </li>`;
+js_filter.addEventListener("click",(e) => {
+  let str_all = "";
+  axios_data.map(function(item){
+    str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
+    <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" id="${item.id}">
+    <p class="text-sm grow ${item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
+    <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" id="${item.id}">
+    </li>`;
 
-//     if(e.target.value === "全部"){
+    if(e.target.value === "全部"){
       
-//       // btn 樣式
-//       js_btn.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
-//       js_btn_false.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-//       js_btn_true.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-//       // dom data
-//       str_all += str;
-//     }else if(e.target.value === "待完成"){
-//       // btn 樣式
-//       js_btn_false.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
-//       js_btn.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-//       js_btn_true.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-//       // dom data
-//       if(item.finish === false){
-//         str_all += str;
-//       }
-//     }else if(e.target.value === "已完成"){
-//       // btn 樣式
-//       js_btn_true.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
-//       js_btn_false.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-//       js_btn.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-//       // dom data
-//       if(item.finish === true){
-//         str_all += str;
-//       }
-//     }
-//   })
-//   js_list.innerHTML = str_all;
-// })
+      // btn 樣式
+      js_btn.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
+      js_btn_false.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
+      js_btn_true.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
+      // dom data
+      str_all += str;
+    }else if(e.target.value === "待完成"){
+      // btn 樣式
+      js_btn_false.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
+      js_btn.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
+      js_btn_true.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
+      // dom data
+      if(item.completed_at === null){
+        str_all += str;
+      }
+    }else if(e.target.value === "已完成"){
+      // btn 樣式
+      js_btn_true.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
+      js_btn_false.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
+      js_btn.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
+      // dom data
+      if(item.completed_at !== null){
+        str_all += str;
+      }
+    }
+  })
+  js_list.innerHTML = str_all;
+})
 
 // 監聽 => 完成打勾
 // js_list.addEventListener("click",function(e){
@@ -130,14 +112,14 @@ function get_axios (){
 }
 
 // 函式 => axios 推資料
-function post_todo(obj){
-  axios
-  .post("https://fathomless-brushlands-42339.herokuapp.com/todo1",obj)
-  .then(function (response) {
-    get_axios()
-    callData();
-  });
-}
+// function post_todo(obj){
+//   axios
+//   .post("https://fathomless-brushlands-42339.herokuapp.com/todo1",obj)
+//   .then(function (response) {
+//     get_axios()
+//     callData();
+//   });
+// }
 
 // 函式 => axios 刪除資料
 function delete_todo(id){
@@ -149,31 +131,25 @@ function delete_todo(id){
   });
 }
 
-// 函式 => console axios 資料
-function callData() {
-  console.log(data);
-}
-
 // 函式 => DOM 待辦清單
 function init(){
   let str_all = "";
   let todoNum = 0;
   // 列表
-  axios_data_todos.forEach(function(item){
+  axios_data_todos.map(function(item){
     str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
-      <input type="checkbox" ${item.finish && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.finish}" id="${item.id}">
-      <p class="js_finish text-sm grow ${ item.finish && 'line-through text-third'}">${item.content}</p>
+      <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" id="${item.id}">
+      <p class="js_finish text-sm grow ${ item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
       <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" id="${item.id}">
       </li>`
     str_all += str;
-    item.finish === false && todoNum++;
+    item.completed_at === null && todoNum++;
   })
   js_list.innerHTML = str_all;
   // 左下角 total
 
   js_total.textContent = `${todoNum} 個待完成項目`
   js_userName.textContent = `${nickname} 的待辦清單`
-
 }
 
 
@@ -188,12 +164,11 @@ const _url = "https://todoo.5xcamp.us";
 let axios_data =[];
 let axios_data_todos =[];
 const user_obj = { user: {} };
-let config = {headers: { 'Authorization': authorization}};
+let config = {headers:{'Authorization': authorization}};
 
-// (待完成) 監聽 => 點擊後登出
+// 監聽 => 點擊後登出
 js_logOut.addEventListener("click",(e)=>{
-  // alert('點擊成功');
-  // console.log(e);
+  e.preventDefault();
   log_out();
 })
 
@@ -206,7 +181,7 @@ const log_out = () => {
     localStorage.removeItem('authorization');
     localStorage.removeItem('nickname');
     alert("已登出")
-    // location.href = 'signup_and_login.html';
+    location.href = 'signup_and_login.html';
   })
   .catch((err) => {
     console.log(err);
@@ -226,12 +201,25 @@ const getTodo = () => {
 }
 
 // 函式 => axios 推資料
-const add_todo = () => {
-  axios.post(`${_url}/todos`,user_obj,config)
-
+const add_todo = (user_obj) => {
+  axios
+  .post(`${_url}/todos`,user_obj,config)
   .then(res => {
     console.log(res.data);
+    getTodo();
   })
 }
+
+// {user:
+//   {todos:[{1},{2},{3}]}
+// }
+
+// 監聽 => 新增待辦事項
+add_event.addEventListener("click",(e) => {
+  let user_obj = { todo: {content: add_text.value} };
+  // 排除無效新增
+  add_text.value === "" ? alert("請新增代辦事項") : add_todo(user_obj);
+  init();
+  })
 
 getTodo();

@@ -62,7 +62,8 @@ sign_btn.addEventListener("click",(e) => {
     return
   } else {
     signUp(sign_email.value,sign_nickName.value,sign_password.value);
-    alert('成功')
+    to_signUp.classList.add("hidden");
+    to_logIn.classList.remove("hidden");
   }
 })
 
@@ -84,6 +85,7 @@ const signUp = (email, nickname, password) => {
     .then(res =>{
       console.log(res.data);
       jwt = res.headers.authorization;
+      alert(res.data.message);
     })
 }
 
