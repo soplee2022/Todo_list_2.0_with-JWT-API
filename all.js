@@ -13,7 +13,7 @@ let js_userName = document.querySelector(".js_userName");
 let obj = {};
 // get_axios ();
 
-// 監聽 => 篩選待辦事項
+// （待修改）監聽 => 篩選待辦事項
 js_filter.addEventListener("click",(e) => {
   let str_all = "";
   axios_data.map(function(item){
@@ -55,92 +55,46 @@ js_filter.addEventListener("click",(e) => {
 })
 
 // 監聽 => 完成打勾
-// js_list.addEventListener("click",function(e){
-//   if(e.target.type === "checkbox"){
-//     data.forEach(function(item){
-//       let judge = e.target.getAttribute("finish") === 'false' ? false : true;
-
-//       // 比對 dom & data 狀態
-//       if(judge === item.finish){
-//         // 用 id 指定修改哪一筆
-//         if(Number(e.target.getAttribute("id")) === item.id){
-//           item.finish = !item.finish;
-//           let id = item.id;
-//           updateData(id,item.finish);
-//         }
-//       }
-//     })
-//   }
-// })
+js_list.addEventListener("click",(e) => {
+  e.preventDefault();
+  let num = e.target.dataset.num;
+  let id = axios_data_todos[num].id;
+  if(e.target.type === "checkbox"){
+    switch_todo(id)
+  }
+})
 
 // 監聽 => 刪除指定資料
-// js_list.addEventListener("click",(e)=>{
-//   data.forEach(function(item){
-//     if(e.target.type === "button"){
-//       if(Number(e.target.getAttribute("id")) === item.id){
-//         id = item.id;
-//         delete_todo(id)
-//       }
-//     }
-//   })
-// })
+js_list.addEventListener("click",(e)=>{
+  e.preventDefault();
+  let num = e.target.dataset.num;
+  let id = axios_data_todos[num].id;
 
-// 函式 => axios 修改 finish
-function updateData (id,check){
-  // 為什麼使用這個函式時，沒有寫到 check 函式也可以動
-  axios
-  .patch(`https://fathomless-brushlands-42339.herokuapp.com/todo1/${id}`, {
-    finish: check,
-  })
-  .then(function(response) {
-    get_axios();
-  })
-  .catch(function(error){
-    console.log(error);
-  })
-}
-
-// 函式 => axios 抓資料
-function get_axios (){
-  axios
-  .get("https://fathomless-brushlands-42339.herokuapp.com/todo1")
-  .then(function (response) {
-    data = response.data;
-    callData();
-    init();
-  });
-}
-
-// 函式 => axios 推資料
-// function post_todo(obj){
-//   axios
-//   .post("https://fathomless-brushlands-42339.herokuapp.com/todo1",obj)
-//   .then(function (response) {
-//     get_axios()
-//     callData();
-//   });
-// }
+  if(e.target.type === "button"){
+    delete_todo(id)
+  }
+})
 
 // 函式 => axios 刪除資料
-function delete_todo(id){
-  axios
-  .delete(`https://fathomless-brushlands-42339.herokuapp.com/todo1/${id}`)
-  .then(function(response){
-    get_axios ();
-    // callData();
-  });
-}
+// function delete_todo(id){
+//   axios
+//   .delete(`https://fathomless-brushlands-42339.herokuapp.com/todo1/${id}`)
+//   .then(function(response){
+//     get_axios ();
+//     // callData();
+//   });
+// }
 
 // 函式 => DOM 待辦清單
 function init(){
   let str_all = "";
   let todoNum = 0;
   // 列表
-  axios_data_todos.map(function(item){
+  axios_data_todos.map(function(item,index){
     str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
-      <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" id="${item.id}">
+      <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" data-num="${index}">
       <p class="js_finish text-sm grow ${ item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
-      <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" id="${item.id}">
+      <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" data-num="${index}">
       </li>`
     str_all += str;
     item.completed_at === null && todoNum++;
@@ -153,11 +107,8 @@ function init(){
 }
 
 
-// JWT 用箭頭函式，不能用 forEach，用 map()、filter() 處理
-// 物件包函式 => vue react 常見用法
-
+// JWT 變數
 let js_logOut = document.querySelector(".js_logOut");
-
 let authorization = localStorage.getItem('authorization');
 let nickname = localStorage.getItem('nickname');
 const _url = "https://todoo.5xcamp.us";
@@ -171,6 +122,13 @@ js_logOut.addEventListener("click",(e)=>{
   e.preventDefault();
   log_out();
 })
+// 監聽 => 新增待辦事項
+add_event.addEventListener("click",(e) => {
+  let user_obj = { todo: {content: add_text.value} };
+  // 排除無效新增
+  add_text.value === "" ? alert("請新增代辦事項") : add_todo(user_obj);
+  init();
+  })
 
 // 函式 => axios 登出
 const log_out = () => {
@@ -188,7 +146,6 @@ const log_out = () => {
     alert("登出失敗");
   });
 }
-
 // 函式 => axios 顯示列表
 const getTodo = () => {
   axios.get(`${_url}/todos`, config)
@@ -199,7 +156,6 @@ const getTodo = () => {
     init();
   })
 }
-
 // 函式 => axios 推資料
 const add_todo = (user_obj) => {
   axios
@@ -210,16 +166,30 @@ const add_todo = (user_obj) => {
   })
 }
 
+// 函式 => axios 完成／已完成狀態切換
+const switch_todo = (id) => {
+  axios
+  .patch(`${_url}/todos/${id}/toggle`,{}, config)
+  .then(res => {
+    console.log(res.data);
+    getTodo();
+  })
+}
+// 401(不知道怎麼除錯QQ) ---> 加一個空的參數，但不知道為什麼
+
+// 函式 => axios 刪除待辦
+const delete_todo = (id) =>{
+  axios
+  .delete(`${_url}/todos/${id}`, config)
+  .then(res =>{
+    alert(res.data.message);
+    getTodo();
+  })
+}
+
 // {user:
 //   {todos:[{1},{2},{3}]}
 // }
 
-// 監聽 => 新增待辦事項
-add_event.addEventListener("click",(e) => {
-  let user_obj = { todo: {content: add_text.value} };
-  // 排除無效新增
-  add_text.value === "" ? alert("請新增代辦事項") : add_todo(user_obj);
-  init();
-  })
 
 getTodo();
