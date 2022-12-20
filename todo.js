@@ -189,7 +189,7 @@ const log_out = () => {
     localStorage.removeItem('authorization');
     localStorage.removeItem('nickname');
     alert("已登出")
-    location.href = 'signup_and_login.html';
+    location.href = 'index.html';
   })
   .catch((err) => {
     console.log(err);

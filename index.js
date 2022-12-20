@@ -98,14 +98,14 @@ const log_in = (email, password) => {
     localStorage.setItem('authorization', jwt);
     localStorage.setItem('nickname', nickname);
     alert(res.data.message);
-    location.href = 'index.html';
+    location.href = 'todolist.html';
   })
 }
 
 // 函式 => 跳轉到 todo list
 const init = () =>{
   if(authorization!==null|| nickname !==null){
-    location.href='index.html';
+    location.href='todolist.html';
   }else{return}
 }
 

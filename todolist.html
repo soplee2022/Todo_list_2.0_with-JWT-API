@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./dist/output.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- <script src="all.js"></script> -->
+</head>
+
+<body class="bg-primary md:bgLiner h-[100vh]">
+  <div class="container pt-[17px]">
+    <!-- navbar -->
+    <header class="flex justify-between items-center mb-5">
+      <img class="h-7" src="./src/todoList_image/title.svg" alt="">
+      <div class="flex items-center">
+        <div class="hidden md:block">
+          <p class="js_userName text-base font-bold mr-6">菲菲的待辦</p>
+        </div>
+        <button class="js_logOut text-sm md:!text-[16px]">登出</button>
+      </div>
+    </header>
+
+    <!-- add event -->
+    <section class="max-w-[500px] mx-auto flex relative items-center mb-4 box_shadow">
+      <input type="text" class="add_text text-4 text-third py-3 pl-4 rounded-[10px] w-full" placeholder="新增代辦事項">
+      <input type="button" class="add_event w-10 h-10 bg-[url('../src/todoList_image/icon_add.svg')] bg-no-repeat -ml-11" value="">
+    </section>
+
+    <section class="max-w-[500px]  mx-auto flex flex-col items-center bg-white rounded-[10px] box_shadow">
+      <ul class="js_filter flex justify-around w-full">
+        <input type="button" class="js_btn_all normal_btn !active_btn" value="全部">
+        <input type="button" class="js_btn_yet normal_btn" value="待完成">
+        <input type="button" class="js_btn_done normal_btn" value="已完成">
+      </ul>
+      
+      <ul class="flex w-full flex-col justify-around">
+        <ul class="js_list flex w-full flex-col justify-around">
+        <!-- event from all.js -->
+        </ul>
+        <li class="js_footer flex items-center justify-between py-6 mx-6 ">
+          <p class="js_total text-sm">0 個待完成項目</p>
+          <input type="button" class="text-sm text-third" value="清除已完成項目">
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="todo.js"></script>
+</body>
+</html>
