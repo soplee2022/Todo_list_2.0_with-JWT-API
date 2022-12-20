@@ -17,4 +17,10 @@
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
         border-radius: 10px;
     };
+    .active_btn {
+        @apply py-4 !border-b-2 !border-b-secondary w-full !text-secondary text-sm font-bold;
+    }
+    .normal_btn {
+        @apply py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold;
+    }
 }

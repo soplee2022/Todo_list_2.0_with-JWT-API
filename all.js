@@ -3,52 +3,59 @@ let add_event = document.querySelector(".add_event");
 let js_list = document.querySelector(".js_list");
 let js_total = document.querySelector(".js_total");
 let js_filter = document.querySelector(".js_filter");
-let js_btn = document.querySelector(".js_btn");
-let js_btn_true = document.querySelector(".js_btn_true");
-let js_btn_false = document.querySelector(".js_btn_false");
+let js_btn_all = document.querySelector(".js_btn_all");
+let js_btn_yet = document.querySelector(".js_btn_yet");
+let js_btn_done = document.querySelector(".js_btn_done");
 let js_footer = document.querySelector(".js_footer");
 let js_finish = document.querySelector(".js_finish");
 let js_userName = document.querySelector(".js_userName");
 
 let obj = {};
-// get_axios ();
 
-// （待修改）監聽 => 篩選待辦事項
-js_filter.addEventListener("click",(e) => {
+// 監聽 => 篩選待辦事項（all）
+js_btn_all.addEventListener("click",(e)=>{
   let str_all = "";
-  axios_data.map(function(item){
+  axios_data_todos.filter((item,index)=>{
     str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
-    <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" id="${item.id}">
+    <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" data-num="${index}">
     <p class="text-sm grow ${item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
-    <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" id="${item.id}">
+    <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" data-num="${index}">
     </li>`;
 
-    if(e.target.value === "全部"){
-      
-      // btn 樣式
-      js_btn.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
-      js_btn_false.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-      js_btn_true.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-      // dom data
-      str_all += str;
-    }else if(e.target.value === "待完成"){
-      // btn 樣式
-      js_btn_false.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
-      js_btn.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-      js_btn_true.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-      // dom data
-      if(item.completed_at === null){
-        str_all += str;
-      }
-    }else if(e.target.value === "已完成"){
-      // btn 樣式
-      js_btn_true.setAttribute("class","py-4 border-b-2 border-b-black w-full text-center text-secondary text-sm font-bold")
-      js_btn_false.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-      js_btn.setAttribute("class","py-4 border-b-2 border-b-light_gray w-full text-center text-third text-sm font-bold")
-      // dom data
-      if(item.completed_at !== null){
-        str_all += str;
-      }
+    str_all += str;
+  })
+  js_list.innerHTML = str_all;
+})
+
+// 監聽 => 篩選待辦事項（yet）
+js_btn_yet.addEventListener("click",(e)=>{
+  let str_all = "";
+  axios_data_todos.filter((item,index)=>{
+    str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
+    <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" data-num="${index}">
+    <p class="text-sm grow ${item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
+    <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" data-num="${index}">
+    </li>`;
+
+    if(item.completed_at === null){
+      str_all += str
+    }
+  })
+  js_list.innerHTML = str_all;
+})
+
+// 監聽 => 篩選待辦事項（done）
+js_btn_done.addEventListener("click",(e)=>{
+  let str_all = "";
+  axios_data_todos.filter((item,index)=>{
+    str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
+    <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" data-num="${index}">
+    <p class="text-sm grow ${item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
+    <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" data-num="${index}">
+    </li>`;
+
+    if(item.completed_at !== null){
+      str_all += str
     }
   })
   js_list.innerHTML = str_all;
@@ -75,22 +82,38 @@ js_list.addEventListener("click",(e)=>{
   }
 })
 
-// 函式 => axios 刪除資料
-// function delete_todo(id){
-//   axios
-//   .delete(`https://fathomless-brushlands-42339.herokuapp.com/todo1/${id}`)
-//   .then(function(response){
-//     get_axios ();
-//     // callData();
-//   });
-// }
+// 監聽 => 狀態切換
+let page = '全部';
+js_filter.addEventListener("click", (e)=>{
+  if (e.target.value === '全部'){
+    page = '全部';
+    // 樣式切換
+    js_btn_all.classList.add("!active_btn");
+    js_btn_yet.classList.remove("!active_btn");
+    js_btn_done.classList.remove("!active_btn");
+  }else if(e.target.value === '待完成'){
+    page = '待完成';
+    // 樣式切換
+    js_btn_yet.classList.add("!active_btn");
+    js_btn_all.classList.remove("!active_btn");
+    js_btn_done.classList.remove("!active_btn");
+  }else if (e.target.value === '已完成'){
+    page = '已完成';
+    // 樣式切換
+    js_btn_done.classList.add("!active_btn");
+    js_btn_yet.classList.remove("!active_btn");
+    js_btn_all.classList.remove("!active_btn");
+  }
+})
 
 // 函式 => DOM 待辦清單
-function init(){
+const init = ()=>{
   let str_all = "";
   let todoNum = 0;
+
   // 列表
-  axios_data_todos.map(function(item,index){
+  if(page === '全部'){
+    axios_data_todos.map((item,index)=>{
     str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
       <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" data-num="${index}">
       <p class="js_finish text-sm grow ${ item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
@@ -98,14 +121,41 @@ function init(){
       </li>`
     str_all += str;
     item.completed_at === null && todoNum++;
-  })
-  js_list.innerHTML = str_all;
-  // 左下角 total
+    })
+    js_list.innerHTML = str_all;
+  }else if(page === '待完成'){
+    let str_yet = "";
+    axios_data_todos.filter((item,index)=>{
+      str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
+      <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" data-num="${index}">
+      <p class="text-sm grow ${item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
+      <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" data-num="${index}">
+      </li>`;
 
+      if(item.completed_at === null){
+        str_yet += str
+      }
+    })
+    js_list.innerHTML = str_yet;
+  }else if(page === '已完成'){
+    let str_done = "";
+    axios_data_todos.filter((item,index)=>{
+      str = `<li class="flex items-center space-x-4 py-4 mx-6 border-b border-b-light_gray">
+      <input type="checkbox" ${item.completed_at !== null && 'checked'} class="w-5 h-5 rounded-md border border-secondary" name="check" finish="${item.completed_at}" data-num="${index}">
+      <p class="text-sm grow ${item.completed_at !== null && 'line-through text-third'}">${item.content}</p>
+      <input type="button" class="w-7 h-6 bg-[url('../src/todoList_image/icon_delete_black.svg')] bg-no-repeat " value="" data-num="${index}">
+      </li>`;
+
+      if(item.completed_at !== null){
+        str_done += str
+      }
+    })
+    js_list.innerHTML = str_done;
+  }
+  // 左下角 total
   js_total.textContent = `${todoNum} 個待完成項目`
   js_userName.textContent = `${nickname} 的待辦清單`
 }
-
 
 // JWT 變數
 let js_logOut = document.querySelector(".js_logOut");
@@ -169,13 +219,15 @@ const add_todo = (user_obj) => {
 // 函式 => axios 完成／已完成狀態切換
 const switch_todo = (id) => {
   axios
-  .patch(`${_url}/todos/${id}/toggle`,{}, config)
+  .patch(`${_url}/todos/${id}/toggle`, {}, config)
   .then(res => {
     console.log(res.data);
     getTodo();
+  }).catch((err)=>{
+
+    console.log(err);
   })
 }
-// 401(不知道怎麼除錯QQ) ---> 加一個空的參數，但不知道為什麼
 
 // 函式 => axios 刪除待辦
 const delete_todo = (id) =>{
@@ -186,10 +238,5 @@ const delete_todo = (id) =>{
     getTodo();
   })
 }
-
-// {user:
-//   {todos:[{1},{2},{3}]}
-// }
-
 
 getTodo();
